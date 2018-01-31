@@ -28,7 +28,7 @@ javascript:
 
       for(let i = 0; i < title_count; i++)
       {
-        let title           = ''
+        let title = ''
             ,number__padded = pad_value(i + 1, title_count_digits, '0')
             ;
 
@@ -36,15 +36,17 @@ javascript:
         title += `${sanitize_string(titles[i].textContent)}${file_extension}`;
 
         titles__formatted.push(title);
+
+        titles[i].innerHTML     = `<strong>${number__padded}</strong> ${titles[i].textContent}`;
+        titles[i].style.cssText = 'background-color:yellow; color:black';
       }
 
       return titles__formatted;
-    }
+    };
 
     var pad_value = function(value, total_digits, pad_character)
     {
       let value_count_digits = get_digit_count(value);
-
       if(total_digits <= value_count_digits)
       {
         return value;
@@ -75,7 +77,9 @@ javascript:
     };
 
     document.body.appendChild(text_field);
+
     text_field.value = get_formatted_titles().join('\n');
+
     text_field.select();
     document.execCommand('copy');
     document.body.removeChild(text_field);
