@@ -2,7 +2,9 @@ javascript:
 (
   function()
   {
-    var urls=Array.prototype.slice.call(document.querySelectorAll('a.yt-uix-tile-link'));
+    var selector = 'a#video-title'
+        ,urls    = Array.prototype.slice.call(document.querySelectorAll(selector))
+        ;
 
     for(var i=0;i<urls.length;i++)
     {
