@@ -2,8 +2,8 @@ javascript:
 (
   function()
   {
-    var selector = 'a#video-title'
-        ,urls    = Array.prototype.slice.call(document.querySelectorAll(selector))
+    var SELECTOR = 'a.ytd-playlist-thumbnail'
+        ,urls    = Array.prototype.slice.call(document.querySelectorAll(SELECTOR))
         ;
 
     for(var i=0;i<urls.length;i++)
