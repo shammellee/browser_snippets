@@ -22,3 +22,4 @@ javascript:
     document.body.removeChild(text_field);
   }()
 )
+

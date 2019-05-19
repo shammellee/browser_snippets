@@ -41,3 +41,4 @@ javascript:
   document.execCommand('copy');
   document.body.removeChild(title_field);
 )
+
