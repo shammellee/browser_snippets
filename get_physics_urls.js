@@ -2,7 +2,7 @@ javascript:
 (
   function()
   {
-    var SELECTOR = '#moreData span.title a'
+    var SELECTOR = '.videoUList ul.videos span.title a'
         ,urls    = Array.prototype.slice.call(document.querySelectorAll(SELECTOR))
         ;
 
