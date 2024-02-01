@@ -30,7 +30,7 @@ javascript:((() =>
       })
       ;
 
-  anchors_found.forEach(a => urls[a.href] = 0);
+  anchors_found.forEach(e => urls[e.dataset.src || e.src || e.href] = 0);
   ls.setItem(ns('url_count'), Object.keys(urls).length);
   ls.setItem(ls_key, Object.keys(urls).join(' '));
   void 0;
