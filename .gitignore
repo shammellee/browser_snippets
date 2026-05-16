@@ -1,0 +1,96 @@
+# C/C++
+*.d
+!*.d/
+
+# Python
+.ropeproject
+
+# Node
+node_modules/
+
+# Compiled
+*.[ao]
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.py[co]
+*.app
+*.aux
+*.fdb_latexmk
+*.fls
+*.xdv
+*.spl
+*.pygtex
+*.pygstyle
+*.map
+*.wasm
+*.mo
+bookmarklet/bookmarklet
+
+# Backups & Temporary
+*.bak
+*.backup
+*.orig
+*.old
+*.pid
+*.tmp
+*.blend?
+
+# Archives & Images
+*.[7g]z
+*.[jrt]ar
+*.dmg
+*.iso
+*.zip
+
+# Logs & Databases
+logs
+*.log
+*.db
+*.sqlite
+*.sqlite3
+*.library/
+*-wal
+*-shm
+
+# IDE-Generated
+Session.vim
+*.vim
+*.sw[op]
+*.vim-bookmarks
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+C.gitignore & Swift.gitignore
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Terraform
+.terraform/
+
+# Environment
+*.env
+
+# OS-Specific
+.DS_Store
+.DS_Store?
+
+# Build directories
+build/
+bin/
+dist/
+dist-ssr
+*.local
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
