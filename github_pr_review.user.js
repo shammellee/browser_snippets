@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub PR Review
 // @namespace    https://github.com
-// @version      1.1.0
+// @version      1.2.1
 // @description  On any GitHub "Files changed" (/changes) PR view, collapse every file by default and auto-expand only chosen file types.
 // @match        https://github.com/*/*/pull/*/changes*
 // @run-at       document-start
@@ -31,7 +31,7 @@
     /\.(sa|sc|c)ss$/
     ,/\.vue$/
     ,/\.slim$/
-    ,/(?<!\.spec)\.[tj]sx?$/
+    // ,/(?<!\.(spec|jest))\.[tj]sx?$/
   ];
 
   // CSS-module class names GitHub uses for the per-file diff header. These
@@ -40,7 +40,14 @@
   // than the full string.
   const FILE_HEADER_SELECTOR = '[class*="diff-file-header__"]';
 
-  const processed_headers = new WeakSet();
+  // Header -> timestamp first seen. On a cold/hard reload, GitHub can flip
+  // a header's chevron icon well after the header itself mounts (diff
+  // content streams in over the network and swaps the icon class on the
+  // existing node). We keep reconciling each header for a short window
+  // after first sighting to catch that late flip, then stop -- so we don't
+  // fight a user who manually expands a file later on.
+  const first_seen   = new WeakMap();
+  const RECONCILE_MS = 5000;
 
   function should_expand(file_path)
   {
@@ -111,18 +118,30 @@
 
   function process_header(header)
   {
-    if (processed_headers.has(header))
+    const seen_at = first_seen.get(header);
+
+    // Past the reconciliation window: assume any remaining mismatch is
+    // either GitHub's settled final state or a deliberate user toggle, and
+    // stop touching this header.
+    if (seen_at !== undefined && Date.now() - seen_at > RECONCILE_MS)
     {
       return;
     }
 
-    processed_headers.add(header);
-
     const toggle_button = get_toggle_button(header);
 
+    // Header may render before its toggle button mounts (GitHub streams
+    // diff content in progressively on large PRs). Don't record it as seen
+    // until there's a button to act on, so a later scan can still catch it
+    // once it exists.
     if (!toggle_button)
     {
       return;
+    }
+
+    if (seen_at === undefined)
+    {
+      first_seen.set(header, Date.now());
     }
 
     const file_path      = get_file_path(header);
@@ -165,7 +184,16 @@
 
   const observer = new MutationObserver(schedule_scan);
 
-  observer.observe(document.documentElement, {childList: true, subtree: true});
+  // "attributes" (scoped to "class") catches the chevron icon flipping from
+  // a loading placeholder to its final state on an existing node -- a plain
+  // childList observer misses that when the header itself doesn't remount.
+  observer.observe(document.documentElement,
+  {
+    childList: true
+    ,subtree: true
+    ,attributes: true
+    ,attributeFilter: ['class']
+  });
 
   // Initial pass in case content is already present (e.g. bfcache restore).
   schedule_scan();
