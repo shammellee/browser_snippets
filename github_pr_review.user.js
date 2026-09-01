@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         GitHub PR Review
 // @namespace    https://github.com
-// @version      1.2.1
+// @version      1.3.0
 // @description  On any GitHub "Files changed" (/changes) PR view, collapse every file by default and auto-expand only chosen file types.
-// @match        https://github.com/*/*/pull/*/changes*
+// @match        https://github.com/*/*/pull/*
 // @run-at       document-start
 // @grant        none
 // ==/UserScript==
@@ -11,6 +11,15 @@
 (function ()
 {
   'use strict';
+
+  // The @match above covers the whole PR (not just /changes) on purpose.
+  // GitHub switches between PR tabs via pushState (Turbo), not a real
+  // navigation, so a script matched only against /changes never gets
+  // injected when the user arrives there by clicking the "Files changed"
+  // tab -- only a hard refresh triggers a real navigation for the
+  // userscript manager to act on. Matching the whole PR instead means the
+  // script (and its MutationObserver, below) is already running before
+  // that tab click, ready to see the diff headers Turbo streams in.
 
   // ---------------------------------------------------------------------
   // File patterns to auto-expand. Everything NOT matched by one of these
