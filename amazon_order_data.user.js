@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Amazon Order Data Copier
 // @namespace    https://www.amazon.com
-// @version      1.0.2
+// @version      1.0.3
 // @description  On Amazon's order history page, add a copy icon to each item that copies its title, ASIN, and order number as a tab-separated row for pasting into a spreadsheet.
 // @match        https://www.amazon.com/*/your-account/order-history*
 // @match        https://www.amazon.com/gp/your-account/order-history*
@@ -25,9 +25,10 @@
   // Amazon uses two different markup layouts for an item depending on how
   // many products shipped together in the same box: a single item gets an
   // ".item-box" with its title in ".yohtmlc-product-title", while items
-  // that shipped alongside others in the same box get a
-  // ".yo-enhanced-flex-card" with its title in ".yo-enhanced-title"
-  // instead. Both are scanned so no item is missed.
+  // that shipped alongside others in the same box get a card with its title
+  // in ".yo-enhanced-title" instead. That card is ".yo-enhanced-card" when
+  // shown in a carousel and ".yo-enhanced-flex-card" in the older flex
+  // layout. Both are scanned so no item is missed.
   const ITEM_LAYOUTS =
   [
     {
@@ -35,7 +36,7 @@
       ,title_selector:    '.yohtmlc-product-title'
     }
     ,{
-      item_selector:      '.yo-enhanced-flex-card'
+      item_selector:      '.yo-enhanced-card, .yo-enhanced-flex-card'
       ,title_selector:    '.yo-enhanced-title'
     }
   ];
